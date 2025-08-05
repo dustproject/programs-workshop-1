@@ -33,7 +33,6 @@ export default defineWorld({
     ForceFieldProgram: {
       openAccess: false,
       deploy: {
-        disabled: true,
         registerWorldFunctions: false,
       },
     },

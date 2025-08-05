@@ -5,19 +5,28 @@ import { WorldConsumer } from "@latticexyz/world-consumer/src/experimental/World
 import { System } from "@latticexyz/world/src/System.sol";
 import { WorldContextConsumer } from "@latticexyz/world/src/WorldContext.sol";
 
-import { HookContext, IAttachProgram, IDetachProgram, IMine } from "@dust/world/src/ProgramHooks.sol";
+import { HookContext, IAttachProgram, IBuild, IDetachProgram, IMine } from "@dust/world/src/ProgramHooks.sol";
 import { IWorld } from "@dust/world/src/codegen/world/IWorld.sol";
 import { EntityId } from "@dust/world/src/types/EntityId.sol";
 import { ObjectTypes } from "@dust/world/src/types/ObjectType.sol";
 
 import { Constants } from "./Constants.sol";
 
-contract ForceFieldProgram is IMine, IAttachProgram, IDetachProgram, System, WorldConsumer(Constants.DUST_WORLD) {
+contract ForceFieldProgram is
+  IMine,
+  IBuild,
+  IAttachProgram,
+  IDetachProgram,
+  System,
+  WorldConsumer(Constants.DUST_WORLD)
+{
   function onAttachProgram(HookContext calldata ctx) public onlyWorld { }
 
   function onDetachProgram(HookContext calldata ctx) public view onlyWorld { }
 
   function onMine(HookContext calldata ctx, MineData calldata mine) public view onlyWorld { }
+
+  function onBuild(HookContext calldata ctx, BuildData calldata build) public view onlyWorld { }
 
   fallback() external { }
 

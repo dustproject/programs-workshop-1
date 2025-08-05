@@ -42,8 +42,8 @@ library ChestProgramLib {
     return CallWrapper(self.toResourceId(), address(0)).onAttachProgram(ctx);
   }
 
-  function onDetachProgram(ChestProgramType self, HookContext memory __auxArg0) internal view {
-    return CallWrapper(self.toResourceId(), address(0)).onDetachProgram(__auxArg0);
+  function onDetachProgram(ChestProgramType self, HookContext memory ctx) internal view {
+    return CallWrapper(self.toResourceId(), address(0)).onDetachProgram(ctx);
   }
 
   function onTransfer(
@@ -72,11 +72,11 @@ library ChestProgramLib {
       : _world().callFrom(self.from, self.systemId, systemCall);
   }
 
-  function onDetachProgram(CallWrapper memory self, HookContext memory __auxArg0) internal view {
+  function onDetachProgram(CallWrapper memory self, HookContext memory ctx) internal view {
     // if the contract calling this function is a root system, it should use `callAsRoot`
     if (address(_world()) == address(this)) revert ChestProgramLib_CallingFromRootSystem();
 
-    bytes memory systemCall = abi.encodeCall(_onDetachProgram_HookContext.onDetachProgram, (__auxArg0));
+    bytes memory systemCall = abi.encodeCall(_onDetachProgram_HookContext.onDetachProgram, (ctx));
     bytes memory worldCall = self.from == address(0)
       ? abi.encodeCall(IWorldCall.call, (self.systemId, systemCall))
       : abi.encodeCall(IWorldCall.callFrom, (self.from, self.systemId, systemCall));
@@ -146,8 +146,8 @@ library ChestProgramLib {
     SystemCall.callWithHooksOrRevert(self.from, self.systemId, systemCall, msg.value);
   }
 
-  function onDetachProgram(RootCallWrapper memory self, HookContext memory __auxArg0) internal view {
-    bytes memory systemCall = abi.encodeCall(_onDetachProgram_HookContext.onDetachProgram, (__auxArg0));
+  function onDetachProgram(RootCallWrapper memory self, HookContext memory ctx) internal view {
+    bytes memory systemCall = abi.encodeCall(_onDetachProgram_HookContext.onDetachProgram, (ctx));
     SystemCall.staticcallOrRevert(self.from, self.systemId, systemCall);
   }
 
@@ -226,7 +226,7 @@ interface _onAttachProgram_HookContext {
 }
 
 interface _onDetachProgram_HookContext {
-  function onDetachProgram(HookContext memory __auxArg0) external;
+  function onDetachProgram(HookContext memory ctx) external;
 }
 
 interface _onTransfer_HookContext_ITransfer_TransferData {
