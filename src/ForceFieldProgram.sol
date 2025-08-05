@@ -5,10 +5,8 @@ import { WorldConsumer } from "@latticexyz/world-consumer/src/experimental/World
 import { System } from "@latticexyz/world/src/System.sol";
 import { WorldContextConsumer } from "@latticexyz/world/src/WorldContext.sol";
 
+import { Participant } from "./codegen/tables/Participant.sol";
 import { HookContext, IAttachProgram, IDetachProgram, IMine } from "@dust/world/src/ProgramHooks.sol";
-import { IWorld } from "@dust/world/src/codegen/world/IWorld.sol";
-import { EntityId } from "@dust/world/src/types/EntityId.sol";
-import { ObjectTypes } from "@dust/world/src/types/ObjectType.sol";
 
 import { Constants } from "./Constants.sol";
 
@@ -17,7 +15,13 @@ contract ForceFieldProgram is IMine, IAttachProgram, IDetachProgram, System, Wor
 
   function onDetachProgram(HookContext calldata ctx) public view onlyWorld { }
 
-  function onMine(HookContext calldata ctx, MineData calldata mine) public view onlyWorld { }
+  function onMine(HookContext calldata ctx, MineData calldata mine) public view onlyWorld {
+    if (!ctx.revertOnFailure) return;
+
+    require(Participant.getIsSet(ctx.caller.getPlayerAddress()), "You are not part of the game!");
+
+    require(mine.objectType.isLeaf(), "Object type must be a leaf type");
+  }
 
   fallback() external { }
 
