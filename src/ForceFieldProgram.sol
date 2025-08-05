@@ -6,9 +6,6 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { WorldContextConsumer } from "@latticexyz/world/src/WorldContext.sol";
 
 import { HookContext, IAttachProgram, IBuild, IDetachProgram, IMine } from "@dust/world/src/ProgramHooks.sol";
-import { IWorld } from "@dust/world/src/codegen/world/IWorld.sol";
-import { EntityId } from "@dust/world/src/types/EntityId.sol";
-import { ObjectTypes } from "@dust/world/src/types/ObjectType.sol";
 
 import { Constants } from "./Constants.sol";
 

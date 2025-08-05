@@ -6,26 +6,15 @@ import { System } from "@latticexyz/world/src/System.sol";
 import { WorldContextConsumer } from "@latticexyz/world/src/WorldContext.sol";
 
 import { HookContext, IAttachProgram, IDetachProgram, ITransfer } from "@dust/world/src/ProgramHooks.sol";
-import { IWorld } from "@dust/world/src/codegen/world/IWorld.sol";
-import { EntityId } from "@dust/world/src/types/EntityId.sol";
 
 import { Constants } from "./Constants.sol";
-import { CheckersGame } from "./codegen/tables/CheckersGame.sol";
-import { VaultToGame } from "./codegen/tables/VaultToGame.sol";
 
 contract ChestProgram is ITransfer, IAttachProgram, IDetachProgram, System, WorldConsumer(Constants.DUST_WORLD) {
-  function onAttachProgram(HookContext calldata ctx) public onlyWorld {
+  function onAttachProgram(HookContext calldata ctx) public onlyWorld { }
 
-  }
+  function onDetachProgram(HookContext calldata ctx) public view onlyWorld { }
 
-  function onDetachProgram(HookContext calldata ctx) public view onlyWorld {
-
-  }
-
-  function onTransfer(HookContext calldata ctx, TransferData calldata transfer) public view onlyWorld {
-
-
-  }
+  function onTransfer(HookContext calldata ctx, TransferData calldata transfer) public view onlyWorld { }
 
   fallback() external { }
 
