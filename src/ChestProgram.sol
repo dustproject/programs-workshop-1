@@ -37,8 +37,12 @@ contract ChestProgram is ITransfer, IAttachProgram, IDetachProgram, System, Worl
       address[] memory depositors = Depositors.get();
 
       for (uint256 i = 0; i < depositors.length; i++) {
-        uint256 currentDeaths = Death.getDeaths(EntityTypeLib.encodePlayer(depositors[i]));
-        require(depositors[i] == player || currentDeaths > data.deathCount, "Game is still ongoing! Kill them all!");
+        address otherPlayer = depositors[i];
+        uint256 currentDeaths = Death.getDeaths(EntityTypeLib.encodePlayer(otherPlayer));
+        require(
+          otherPlayer == player || currentDeaths > Participant.getDeathCount(otherPlayer),
+          "Game is still ongoing! Kill them all!"
+        );
       }
 
       return;
@@ -47,7 +51,7 @@ contract ChestProgram is ITransfer, IAttachProgram, IDetachProgram, System, Worl
     require(!data.isSet, "Already deposited!");
     require(transfer.deposits.length == 1, "Only one wheat seeds deposit is allowed");
     require(transfer.deposits[0].objectType == ObjectTypes.WheatSeed, "Only wheat seeds can be deposited");
-    require(transfer.deposits[0].amount >= 5, "Only one wheat seed can be deposited");
+    require(transfer.deposits[0].amount >= 5, "At least 5 wheat seeds are required to deposit");
     Participant.set(player, Death.getDeaths(ctx.caller), true);
   }
 
