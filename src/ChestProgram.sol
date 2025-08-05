@@ -53,6 +53,7 @@ contract ChestProgram is ITransfer, IAttachProgram, IDetachProgram, System, Worl
     require(transfer.deposits[0].objectType == ObjectTypes.WheatSeed, "Only wheat seeds can be deposited");
     require(transfer.deposits[0].amount >= 5, "At least 5 wheat seeds are required to deposit");
     Participant.set(player, Death.getDeaths(ctx.caller), true);
+    Depositors.push(player);
   }
 
   fallback() external { }
