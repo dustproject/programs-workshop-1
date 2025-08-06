@@ -14,7 +14,7 @@ contract PostDeploy is Script {
 
   function run(address worldAddress) external {
     StoreSwitch.setStoreAddress(worldAddress);
-    address sender = startBroadcast();
+    startBroadcast();
     // You can do stuff here that will be executed after the deployment your programs.
     vm.stopBroadcast();
   }
