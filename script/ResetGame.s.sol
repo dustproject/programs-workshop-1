@@ -33,8 +33,6 @@ contract ResetGame is Script {
 
     Depositors.deleteRecord();
 
-    Participant.deleteRecord(0x983Ef965aD4c661455287A5B4088b4E702b950Fd);
-
     vm.stopBroadcast();
   }
 }
