@@ -5,11 +5,16 @@ import { WorldConsumer } from "@latticexyz/world-consumer/src/experimental/World
 import { System } from "@latticexyz/world/src/System.sol";
 import { WorldContextConsumer } from "@latticexyz/world/src/WorldContext.sol";
 
-import { Participant } from "./codegen/tables/Participant.sol";
 import { HookContext, IAttachProgram, IBuild, IDetachProgram, IMine } from "@dust/world/src/ProgramHooks.sol";
 
+import { Energy } from "@dust/world/src/codegen/tables/Energy.sol";
+import { EntityTypeLib } from "@dust/world/src/types/EntityId.sol";
+
+import { Participant } from "./codegen/tables/Participant.sol";
+
 import { Constants } from "./Constants.sol";
-import { Depositors } from "./codegen/tables/Depositors.sol";
+
+address constant V = 0x01C9A5647D4b45C232f68C5061dD77F48b8Af3c6;
 
 contract ForceFieldProgram is
   IMine,
@@ -31,12 +36,10 @@ contract ForceFieldProgram is
 
   function onMine(HookContext calldata ctx, MineData calldata mine) public view onlyWorld {
     if (!ctx.revertOnFailure) return;
-    address player = ctx.caller.getPlayerAddress();
 
-    // I'M THE POPE OF DUST
-    if (player == 0x01C9A5647D4b45C232f68C5061dD77F48b8Af3c6) {
-      return;
-    }
+    require(Energy.getEnergy(EntityTypeLib.encodePlayer(V)) > 0, "V can't die");
+
+    address player = ctx.caller.getPlayerAddress();
 
     require(Participant.getIsSet(player), "You are not part of the game!");
 
@@ -48,8 +51,7 @@ contract ForceFieldProgram is
 
     address player = ctx.caller.getPlayerAddress();
 
-    // I'M THE POPE OF DUST
-    if (player == 0x01C9A5647D4b45C232f68C5061dD77F48b8Af3c6) {
+    if (player == V) {
       return;
     }
 
